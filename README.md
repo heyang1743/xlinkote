@@ -20,6 +20,10 @@
 
 [在线使用](https://xlinkote.netlify.app/)
 
+[桌面客户端](https://github.com/xushengfeng/xln-desktop)，如果浏览器是最新的，推荐在线使用
+
+🚨 此程序仍然处于测试状态，各项功能会不断变动，无法确保数据可用性，请谨慎使用
+
 ### 编译
 
 ```shell
@@ -41,13 +45,15 @@ npm run preview # 打开服务器
     -   [x] webDAV（默认压缩，支持加密）
 -   [ ] 元素(组件)
     -   [x] markdown 元素（支持补全括号和引号）
-    -   [x] 数学公式（$\LaTeX$数学公式,图形化点击输入）
-    -   [x] 待办todo
+    -   [x] 数学公式（$\LaTeX$ 数学公式，图形化点击输入，基于[MathJax](https://github.com/mathjax/MathJax)）
+    -   [x] $\LaTeX$ 支持（基于[tikzjax](https://github.com/kisonecat/tikzjax)和[obsidian-tikzjax](https://github.com/artisticat1/obsidian-tikzjax)，可使用 tikzjax）
+    -   [x] 待办 todo
     -   [x] 画板
         -   [x] 压感
         -   [x] 粗细
         -   [x] 颜色
         -   [x] 图层
+        -   [x] 形状识别
     -   [ ] 外部导入
         -   [x] 拖拽
         -   [x] 粘贴
@@ -56,10 +62,14 @@ npm run preview # 打开服务器
         -   [x] 视频
         -   [x] pdf
         -   [x] glb 3D 模型
+        -   [x] Geogebra
     -   [x] 录音
-    -   [ ] 思维导图
+    -   [x] 连接线条
+    -   [x] 日历
+    -   [x] 计时器（正计时、倒计时、闹钟）
 -   [ ] 搜索
     -   [x] 模糊搜索
+-   [x] 演示模式（PPT）
 -   [x] PWA 支持
 
 默认缓存到本地，离线可用，即使无法访问官网也能使用。若要更新，在设置点击“清除缓存并更新”

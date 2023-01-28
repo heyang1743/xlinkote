@@ -2,3 +2,5 @@ node_modules
 .vercel
 dist
 public/ocr/
+lib/tikzjax.js
+lib/mathjax@3.2.2-tex-svg-full.js

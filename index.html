@@ -10,7 +10,7 @@
     <link rel="manifest" href="./manifest.json">
     <link rel="icon" href="./logo/logo.svg" type="image/x-icon">
     <link rel="apple-touch-icon" href="./logo/logo.svg">
-    <link rel="stylesheet" type="text/css" href="css/默认.css">
+    <link rel="stylesheet" href="css/css.css">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
             <div>
                 <div id="绑定文件" title="绑定文件"><img src="./assets/icons/binding_file.svg" class="icon"></div>
                 <div id="导出文件" title="导出文件"><img src="./assets/icons/down.svg" class="icon"></div>
-                <div id="上传到云" title="上传到云"><img src="./assets/icons/cloud_up.svg" class="icon"></div>
+                <div id="保存" title="保存"><img src="./assets/icons/save.svg" class="icon"></div>
                 <div id="新建画布" title="新建画布"><img src="./assets/icons/add_canvas.svg" class="icon"></div>
                 <div id="新建元素" title="新建元素"><img src="./assets/icons/add.svg" class="icon"></div>
                 <div id="切换侧栏" title="切换侧栏"><img src="./assets/icons/side_panel.svg" class="icon"></div>
@@ -66,12 +66,19 @@
             </div>
 
             <div id="选择"></div>
+            <div id="选择框"></div>
             <div id="导航" class="flex gap-2 absolute right-3 bottom-3">
                 <div id="方向锁定"><img src="./assets/icons/x_y.svg" class="icon"></div>
                 <div id="归位"><img src="./assets/icons/back.svg" class="icon"></div>
                 <div id="缩放" class="px-1 flex items-center text-black dark:text-white relative font-mono" tabindex="0">
                     <input type="text" name="zoom" id="zoom" class="text-right">% <div id="zooms"
-                        class="zoom_list_hide absolute bottom-4 flex flex-col gap-1 p-1 rounded-sm bar">
+                        class="zoom_list_hide absolute bottom-4 flex flex-col gap-1 p-1 rounded left-0 w-full bar transition-opacity">
+                    </div>
+                </div>
+                <div>
+                    <img src="./assets/icons/minimap.svg" class="icon">
+                    <div id="mini_map_p">
+                        <canvas id="mini_map"></canvas>
                     </div>
                 </div>
             </div>
@@ -81,22 +88,22 @@
         <div id="handle">
             <div></div>
         </div>
-        <div id="tabs" class="icon-pel">
+        <div id="tabs" class="icon-pel hide_scrool_bar">
             <div title="文件" class="selected_item selected_item_hide"><img src="./assets/icons/file.svg" class="icon">
             </div>
-            <div title="画布"><img src="./assets/icons/dir.svg" class="icon"></div>
             <div title="图层与布局"><img src="./assets/icons/layout.svg" class="icon"></div>
             <div title="更多"><img src="./assets/icons/more.svg" class="icon"></div>
             <div title="markdown"><img src="./assets/icons/md.svg" class="icon"></div>
+            <div title="演示"><img src="./assets/icons/play.svg" class="icon"></div>
             <div title="中转站"><img src="./assets/icons/zzz.svg" class="icon"></div>
-            <div title="资源"><img src="./assets/icons/assets.svg" class="icon"></div>
+            <div title="资源" id="资源tab"><img src="./assets/icons/assets.svg" class="icon"></div>
+            <div title="值"><img src="./assets/icons/value.svg" class="icon"></div>
             <div title="偏好设置" id="偏好设置"><img src="./assets/icons/setting.svg" class="icon"></div>
         </div>
         <div id="items" class="item_hide">
             <div id="文件" class="flex flex-col items-center"></div>
-            <div id="集" class="flex flex-col items-center"></div>
             <div id="层容器" class="层容器">
-                <div class="tools icon-pel flex z-10">
+                <div class="tools icon-pel flex z-10 hide_scrool_bar">
                     <div id="新建元素" title="新建元素"><img src="./assets/icons/add.svg" class="icon"></div>
                     <div id="删除元素" title="删除元素"><img src="./assets/icons/close.svg" class="icon"></div>
                     <div id="底层" title="移动到底层"><img src="./assets/icons/plow.svg" class="icon"></div>
@@ -109,14 +116,15 @@
                     <div id="转为一行" title="转为一行"><img src="./assets/icons/to_one_line.svg" class="icon"></div>
                     <div id="拆分为多行" title="拆分为多行"><img src="./assets/icons/to_more_line.svg" class="icon"></div>
                 </div>
-                <div class="z-10">
+                <div class="z-10 relative">
                     <div class="w-full flex" id="xywh">
                         <input type="number" name="xywh_x" id="xywh_x">
                         <input type="number" name="xywh_y" id="xywh_y">
                         <input type="number" name="xywh_w" id="xywh_w">
                         <input type="number" name="xywh_h" id="xywh_h">
                     </div>
-                    <textarea name="style" id="el_style" class="w-full"></textarea>
+                    <div id="el_style" class="w-full"></div>
+                    <div id="style_com_list"></div>
                 </div>
                 <div id="层"></div>
             </div>
@@ -124,7 +132,6 @@
                 <div id="绑定文件" title="绑定文件"><img src="./assets/icons/file.svg" class="icon"></div>
                 <div id="导出文件" title="导出文件"><img src="./assets/icons/down.svg" class="icon"></div>
                 <div id="从云加载" title="从云加载"><img src="./assets/icons/cloud_down.svg" class="icon"></div>
-                <div id="上传到云" title="上传到云"><img src="./assets/icons/cloud_up.svg" class="icon"></div>
                 <div id="加载数据库" title="加载数据库"><img src="./assets/icons/db_up.svg" class="icon"><input type="file"
                         name="" id="db_load" class="db_load"></div>
                 <div id="下载数据库" title="下载数据库"><img src="./assets/icons/db_down.svg" class="icon"></div>
@@ -144,13 +151,21 @@
                     class="w-full underline">mathcha.io</a>
                 <x-sinppet></x-sinppet>
             </div>
+            <div id="演示">
+                <div id="ys_list"></div>
+                <div id="ys_add"><img src="./assets/icons/add.svg" class="icon"></div>
+            </div>
             <div id="中转站">
                 <div id="常驻" class="icon-pel">
-                    <div id="录音" title="新建录音机"><img src="./assets/icons/record.svg" class="icon"></div>
+                    <div id="x-record" title="新建录音机"><img src="./assets/icons/record.svg" class="icon"></div>
+                    <div id="x-calendar" title="新建日历"><img src="./assets/icons/calendar.svg" class="icon"></div>
+                    <div id="x-time" title="新建计时器"><img src="./assets/icons/time.svg" class="icon"></div>
+                    <div id="x-graph" title="新建几何容器"><img src="./assets/icons/graph.svg" class="icon"></div>
                 </div>
                 <div id="临时"></div>
             </div>
             <div id="资源"></div>
+            <div id="值"></div>
             <div id="设置">
                 <form name="webdav">
                     <fieldset>
@@ -159,7 +174,7 @@
                         <br>
                         用户名<br><input type="text" name="用户名" autocomplete="username">
                         <br>
-                        密码<br><input type="text" name="密码">
+                        密码<br><input type="text" name="密码" class="password">
                         <br>
                         自动上传
                         <select name="自动上传" id="">
@@ -171,7 +186,7 @@
                         </select>
                         <br>
                         加密密钥<br>
-                        <input type="text" name="加密密钥" placeholder="若要启用，请输入自定义密钥">
+                        <input type="text" name="加密密钥" placeholder="若要启用，请输入自定义密钥" class="password">
                     </fieldset>
                 </form>
                 <form name="ink">
@@ -182,6 +197,25 @@
                         语言<br><input type="text" name="语言">
                         <br>
                         延时<br><input type="number" name="延时" min="0.1" step="0.1">
+                    </fieldset>
+                </form>
+                <form name="asr">
+                    <fieldset>
+                        <legend class="text-lg font-semibold">语音识别</legend>
+                        服务器<br><input type="url" name="url" autocomplete="url">
+                    </fieldset>
+                </form>
+                <form name="sort">
+                    <fieldset>
+                        <legend class="text-lg font-semibold">排序</legend>
+                        方式
+                        <select name="type">
+                            <option value="change_time">修改时间</option>
+                            <option value="create_time">创建时间</option>
+                            <option value="name">文件名</option>
+                        </select>
+                        <br>
+                        <label><input type="checkbox" name="reverse">逆序</label>
                     </fieldset>
                 </form>
                 <div id="about">
@@ -209,19 +243,12 @@
                     <div id="导出设置" title="导出设置"><img src="./assets/icons/setting_down.svg" class="icon"></div>
                     <div id="导入设置" title="导入设置"><img src="./assets/icons/setting_up.svg" class="icon"></div>
                     <div id="放弃设置" title="放弃设置"><img src="./assets/icons/close.svg" class="icon"></div>
-                    <div id="保存设置" title="保存设置"><img src="./assets/icons/yes.svg" class="icon"></div>
                 </div>
 
             </div>
         </div>
     </div>
-    <div id="breadcrumbs" class="breadcrumbs">
-        <div class="bci" data-id="0">
-            <div></div>
-            <div></div>
-        </div>
-        <div id="bc_sw"><img src="./assets/icons/ul_hide2.svg" class="icon"></div>
-    </div>
+    <div id="breadcrumbs" class="breadcrumbs hide_scrool_bar"></div>
     <div id="搜索">
         <input type="search" id="search" autocomplete="off" spellcheck="false">
         <div id="搜索结果"></div>
@@ -235,8 +262,6 @@
     <div id="toast"></div>
 </body>
 
-<script src="https://unpkg.com/opencv.js@1.2.1/opencv.js"></script>
-<script src="https://unpkg.com/onnxruntime-web@1.13.1/dist/ort.min.js"></script>
 <script type="module" src="./src/js/js.ts"></script>
 
 </html>
